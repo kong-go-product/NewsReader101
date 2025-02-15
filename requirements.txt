@@ -8,3 +8,7 @@ html2text==2020.1.16
 selenium==4.10.0
 requests-html==0.10.0
 beautifulsoup4==4.11.1
+lxml==5.3.1
+lxml_html_clean==0.4.1
+schedule==1.2.2
+reportlab==4.3.1
