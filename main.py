@@ -6,6 +6,7 @@ import time
 import pyppeteer
 import tldextract
 import os
+import sys
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -123,17 +124,22 @@ def get_second_level_domain(url):
 # Extract full article content from each link
 def extract_article_content(link):
     try:
-        # Create an HTML Session
-        # session = HTMLSession()
-
-        # Get the page with JavaScript rendering
-        # r = session.get(link)
-        # r.html.render(timeout=20)  # Render JavaScript content
-
         # Use Readability to parse the HTML and extract main content
         # doc = Document(r.html.html)
-        html_content = get_page_content_sync(link)
-        doc = Document(html_content)
+        if sys.platform == "win32":  # Windows 系统
+            print("Use windows")
+            html_content = get_page_content_sync(link)
+            doc = Document(html_content)
+        else:  # 其他系统（假设是 Linux）
+            print("Use linux")
+            # Create an HTML Session
+            session = HTMLSession()
+            # Get the page with JavaScript rendering
+            r = session.get(link)
+            # Render JavaScript content
+            r.html.render(timeout=20)
+            doc = Document(r.html.html)
+
         title = doc.title()
         domain = get_second_level_domain(link)
         print(f"✦{title}" + "\n")  # Get the article title
