@@ -1,3 +1,4 @@
+import sys
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import landscape, A3
 from reportlab.lib.units import inch
@@ -10,9 +11,18 @@ class PDFLayout:
         self.output_filename = output_filename
         self.txt_files = txt_files
 
-        # Register the fonts
-        pdfmetrics.registerFont(TTFont('NotoSansSC', r'C:\eNews\Noto_Sans_SC\static\NotoSansSC-Regular.ttf'))
-        pdfmetrics.registerFont(TTFont('NotoSansSC-SemiBold', r'C:\eNews\Noto_Sans_SC\static\NotoSansSC-SemiBold.ttf'))
+        if sys.platform == "win32":  # Windows 系统
+            # Register the fonts
+            pdfmetrics.registerFont(TTFont('NotoSansSC', r'C:\eNews\Noto_Sans_SC\static\NotoSansSC-Regular.ttf'))
+            pdfmetrics.registerFont(TTFont('NotoSansSC-SemiBold', r'C:\eNews\Noto_Sans_SC\static\NotoSansSC-SemiBold.ttf'))
+        else:
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+            font_path = os.path.join(base_dir, "Noto_Sans_SC", "static", "NotoSansSC-Regular.ttf")
+            font_path_bold = os.path.join(base_dir, "Noto_Sans_SC", "static", "NotoSansSC-SemiBold.ttf")
+            # 注册字体
+            pdfmetrics.registerFont(TTFont("NotoSansSC", font_path))
+            pdfmetrics.registerFont(TTFont("NotoSansSC-SemiBold", font_path_bold))
+
 
         # A2 dimensions in landscape mode  
         self.PAGE_WIDTH, self.PAGE_HEIGHT = landscape(A3)
